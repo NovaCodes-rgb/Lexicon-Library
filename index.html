@@ -1,25 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- الكلمات المفتاحية وعنوان البحث لـ Google -->
-<title>LEXICON Library | مكتبة المراجع والكتب الجامعية مجاناً</title>
-<meta name="description" content="منصة لكسيكون LEXICON لتحميل وقراءة الكتب، الروايات، والمراجع العلمية، الأدبية والقانونية لطلبة الجامعات المغربية مجاناً وبسهولة.">
-<meta name="keywords" content="lexicon library, لكسيكون, كتب جامعية مجانية, مراجع كلية الاداب, مراجع القانون المغربي, تحميل كتب, نصوص أدبية وعلمية, جامعة مولاي اسماعيل">
-
-<!-- كود التحسين للمشاركة في السوشيال ميديا (Open Graph) عشان تطلع الصورة فخمة يلا بارطاجيتي الرابط -->
-<meta property="og:title" content="LEXICON Library | مكتبة المراجع والكتب الجامعية">
-<meta property="og:description" content="ابحث وحمّل آلاف الكتب والمراجع الأكاديمية مجاناً بلمحة زر.">
-<meta property="og:url" content="https://novacodes-rgb.github.io/lexicon-library">
-<meta property="og:type" content="website">
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KTLZ092NNJ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-KTLZ092NNJ');
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LEXICON — Explore Knowledge Without Limits</title>
@@ -1014,9 +995,9 @@ footer {
         <div class="featured-panel-desc" id="editorDesc">A groundbreaking journey into how the human mind constructs, stores, and retrieves memories — blending neuroscience with narrative storytelling.</div>
         <button class="btn-outline-gold" id="editorDownloadBtn">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4M7 10l5 5 5-5M12 15V3"/>
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
           </svg>
-          Download PDF
+          Download Book
         </button>
       </div>
     </div>
@@ -1179,9 +1160,215 @@ const generateRandomMeta = (index) => {
   };
 };
 
-// دالة تسهل تحويل الزائر لصفحة قراءة وتحميل الكتاب
-function redirectToBook(bookKey) {
-  window.open(`https://openlibrary.org${bookKey}`, '_blank');
+/* ─── DOWNLOAD MODAL ────────────────────────────── */
+function showDownloadModal(state, title = '', formats = []) {
+  let modal = document.getElementById('downloadModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'downloadModal';
+    modal.style.cssText = `
+      position:fixed; inset:0; z-index:9999;
+      display:flex; align-items:center; justify-content:center;
+      background:rgba(6,14,26,0.85); backdrop-filter:blur(12px);
+      opacity:0; transition:opacity 0.3s;
+    `;
+    modal.innerHTML = `
+      <div style="
+        background:var(--navy-light); border:1px solid rgba(201,168,76,0.3);
+        border-radius:6px; padding:44px 40px; max-width:420px; width:90%;
+        text-align:center; box-shadow:0 40px 80px rgba(0,0,0,0.6);
+        transform:translateY(16px); transition:transform 0.3s;
+      " id="downloadModalBox">
+        <div id="downloadModalIcon" style="font-size:48px; margin-bottom:20px;">⏳</div>
+        <div id="downloadModalTitle" style="
+          font-family:'Cormorant Garamond',serif; font-size:22px;
+          color:var(--white); margin-bottom:10px; font-weight:600;
+        "></div>
+        <div id="downloadModalSub" style="
+          font-size:13px; color:var(--text-muted); margin-bottom:28px; line-height:1.7;
+        "></div>
+        <div id="downloadModalBtns" style="display:flex; flex-direction:column; gap:10px;"></div>
+        <button onclick="closeDownloadModal()" style="
+          margin-top:20px; background:none; border:none; cursor:pointer;
+          color:rgba(255,255,255,0.3); font-size:12px; letter-spacing:2px;
+          text-transform:uppercase; font-family:'Outfit',sans-serif;
+          transition:color 0.2s;
+        " onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">
+          ✕ Close
+        </button>
+      </div>
+    `;
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeDownloadModal(); });
+    document.body.appendChild(modal);
+  }
+
+  const icon = document.getElementById('downloadModalIcon');
+  const titleEl = document.getElementById('downloadModalTitle');
+  const sub = document.getElementById('downloadModalSub');
+  const btns = document.getElementById('downloadModalBtns');
+  const box = document.getElementById('downloadModalBox');
+
+  btns.innerHTML = '';
+
+  if (state === 'loading') {
+    icon.innerHTML = `<svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="26" cy="26" r="22" stroke="rgba(201,168,76,0.2)" stroke-width="3"/>
+      <path d="M26 4 A22 22 0 0 1 48 26" stroke="var(--gold-light)" stroke-width="3" stroke-linecap="round">
+        <animateTransform attributeName="transform" type="rotate" from="0 26 26" to="360 26 26" dur="0.9s" repeatCount="indefinite"/>
+      </path>
+    </svg>`;
+    titleEl.textContent = title || 'Searching for download...';
+    sub.textContent = 'Connecting to archive repositories. Please wait a moment.';
+  } else if (state === 'formats') {
+    icon.innerHTML = `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--gold-light)" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>`;
+    titleEl.textContent = title;
+    sub.textContent = 'Choose your preferred format to download directly to your device.';
+    formats.forEach(f => {
+      const btn = document.createElement('a');
+      btn.href = f.url;
+      btn.download = '';
+      btn.target = '_blank';
+      btn.rel = 'noopener noreferrer';
+      btn.style.cssText = `
+        display:flex; align-items:center; justify-content:space-between;
+        padding:14px 20px;
+        background:rgba(201,168,76,0.07); border:1px solid rgba(201,168,76,0.25);
+        border-radius:4px; text-decoration:none; color:var(--white);
+        font-family:'Outfit',sans-serif; font-size:13px; font-weight:500;
+        letter-spacing:1px; text-transform:uppercase; transition:all 0.2s;
+        cursor:pointer;
+      `;
+      btn.innerHTML = `
+        <span style="display:flex;align-items:center;gap:12px;">
+          <span style="color:var(--gold-light);font-size:18px;">${f.icon}</span>
+          ${f.label}
+        </span>
+        <span style="color:var(--text-muted);font-size:11px;">Download ↓</span>
+      `;
+      btn.onmouseover = () => { btn.style.background = 'rgba(201,168,76,0.15)'; btn.style.borderColor = 'rgba(201,168,76,0.5)'; };
+      btn.onmouseout = () => { btn.style.background = 'rgba(201,168,76,0.07)'; btn.style.borderColor = 'rgba(201,168,76,0.25)'; };
+      btns.appendChild(btn);
+    });
+  } else if (state === 'error') {
+    icon.innerHTML = '📚';
+    titleEl.textContent = 'Not Available for Download';
+    sub.textContent = title || 'This book is under copyright or not available in the public archive. You can still read it online.';
+    if (formats.length > 0) {
+      const btn = document.createElement('a');
+      btn.href = formats[0].url;
+      btn.target = '_blank';
+      btn.rel = 'noopener noreferrer';
+      btn.style.cssText = `
+        display:flex; align-items:center; justify-content:center; gap:8px;
+        padding:14px 20px;
+        background:transparent; border:1px solid var(--gold);
+        border-radius:4px; text-decoration:none; color:var(--gold-light);
+        font-family:'Outfit',sans-serif; font-size:12px; font-weight:500;
+        letter-spacing:2px; text-transform:uppercase; transition:all 0.2s; cursor:pointer;
+      `;
+      btn.textContent = 'Read Online on Open Library →';
+      btn.onmouseover = () => btn.style.background = 'rgba(201,168,76,0.1)';
+      btn.onmouseout = () => btn.style.background = 'transparent';
+      btns.appendChild(btn);
+    }
+  }
+
+  modal.style.display = 'flex';
+  requestAnimationFrame(() => {
+    modal.style.opacity = '1';
+    box.style.transform = 'translateY(0)';
+  });
+}
+
+function closeDownloadModal() {
+  const modal = document.getElementById('downloadModal');
+  if (modal) {
+    modal.style.opacity = '0';
+    setTimeout(() => { modal.style.display = 'none'; }, 300);
+  }
+}
+
+/* ─── MAIN DOWNLOAD FUNCTION ─────────────────────── */
+async function downloadBook(bookKey, bookTitle) {
+  showDownloadModal('loading', bookTitle);
+
+  try {
+    // جلب معلومات الكتاب من Open Library
+    const bookRes = await fetch(`https://openlibrary.org${bookKey}.json`);
+    const bookData = await bookRes.json();
+
+    const ocaid = bookData.ocaid;
+
+    // إذا ماكانش OCAID — الكتاب مش في Archive.org
+    if (!ocaid) {
+      showDownloadModal('error',
+        'This edition is not available in the public archive for direct download.',
+        [{ url: `https://openlibrary.org${bookKey}` }]
+      );
+      return;
+    }
+
+    // جلب قائمة الملفات من Archive.org
+    const filesRes = await fetch(`https://archive.org/metadata/${ocaid}/files`);
+    const filesData = await filesRes.json();
+
+    if (!filesData.result || filesData.result.length === 0) {
+      showDownloadModal('error',
+        'No downloadable files found in the archive.',
+        [{ url: `https://openlibrary.org${bookKey}` }]
+      );
+      return;
+    }
+
+    const files = filesData.result;
+
+    // إيجاد الملفات المتاحة
+    const formatPriority = [
+      { ext: '.pdf',  label: 'PDF Document',  icon: '📄' },
+      { ext: '.epub', label: 'EPUB eBook',     icon: '📱' },
+      { ext: '.txt',  label: 'Plain Text',     icon: '📝' },
+      { ext: '.djvu', label: 'DjVu Format',    icon: '📋' },
+    ];
+
+    const availableFormats = [];
+    formatPriority.forEach(fmt => {
+      const found = files.find(f =>
+        f.name.toLowerCase().endsWith(fmt.ext) &&
+        !f.name.includes('_meta') &&
+        !f.name.includes('_archive')
+      );
+      if (found) {
+        availableFormats.push({
+          label: fmt.label,
+          icon: fmt.icon,
+          url: `https://archive.org/download/${ocaid}/${found.name}`
+        });
+      }
+    });
+
+    if (availableFormats.length === 0) {
+      showDownloadModal('error',
+        'Files found in archive but no standard formats (PDF/EPUB) available.',
+        [{ url: `https://openlibrary.org${bookKey}` }]
+      );
+      return;
+    }
+
+    // عرض الفورماتات للتحميل
+    showDownloadModal('formats', bookTitle || bookData.title || 'Download Book', availableFormats);
+
+  } catch (err) {
+    console.error('Download error:', err);
+    showDownloadModal('error',
+      'A network error occurred. Please check your connection and try again.',
+      [{ url: `https://openlibrary.org${bookKey}` }]
+    );
+  }
+}
+
+// للتوافق مع كود الـ trending items اللي كيستعمل redirectToBook
+function redirectToBook(bookKey, bookTitle) {
+  downloadBook(bookKey, bookTitle);
 }
 
 /**
@@ -1218,7 +1405,7 @@ async function loadLibraryCollection(query = "philosophy") {
           <img src="${coverUrl}" alt="${book.title}" onerror="this.src='${fallbackCovers[idx % fallbackCovers.length]}'">
           <div class="book-badge">${meta.badge}</div>
           <div class="book-overlay">
-            <button class="btn-read" onclick="redirectToBook('${book.key}')">Download PDF</button>
+            <button class="btn-read" onclick="downloadBook('${book.key}', this.dataset.title)" data-title="${book.title.replace(/"/g, '&quot;')}">⬇ Download</button>
           </div>
         </div>
         <div class="book-info">
@@ -1242,7 +1429,7 @@ async function loadLibraryCollection(query = "philosophy") {
        if(b.cover_i) {
          document.getElementById("editorImg").src = `https://covers.openlibrary.org/b/id/${b.cover_i}-L.jpg`;
        }
-       document.getElementById("editorDownloadBtn").onclick = () => redirectToBook(b.key);
+       document.getElementById("editorDownloadBtn").onclick = () => downloadBook(b.key, b.title);
     }
 
   } catch (error) {
@@ -1277,7 +1464,7 @@ function loadTrendingEntries(subject = "popular") {
 
         const trendItem = document.createElement("div");
         trendItem.className = "trending-item reveal visible";
-        trendItem.onclick = () => redirectToBook(book.key);
+        trendItem.onclick = () => downloadBook(book.key, book.title);
         trendItem.innerHTML = `
           <div class="trending-rank">${rank}</div>
           <div class="trending-cover">
@@ -1326,15 +1513,5 @@ window.addEventListener("DOMContentLoaded", () => {
    loadTrendingEntries("science history");
 });
 </script>
-  <script>
-  atOptions = {
-    'key' : '8100614deca421f34772e407ca59fd6e',
-    'format' : 'iframe',
-    'height' : 90,
-    'width' : 728,
-    'params' : {}
-  };
-</script>
-<script src="https://www.highperformanceformat.com/8100614deca421f34772e407ca59fd6e/invoke.js"></script>
 </body>
 </html>
