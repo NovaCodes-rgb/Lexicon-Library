@@ -819,6 +819,63 @@ footer {
   border-bottom: 1px solid rgba(201,168,76,0.08);
 }
 .strip-dot { width: 3px; height: 3px; background: var(--gold); border-radius: 50%; }
+
+/* ─── MODAL SMART DOWNLOAD (التعديل الجديد) ─── */
+.dl-modal {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(6, 14, 26, 0.9);
+  backdrop-filter: blur(10px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+  padding: 20px;
+}
+.dl-modal.active { opacity: 1; pointer-events: auto; }
+
+.dl-modal-content {
+  background: var(--navy-mid);
+  border: 1px solid var(--gold);
+  box-shadow: var(--shadow-deep), var(--shadow-gold);
+  max-width: 500px; width: 100%;
+  padding: 40px 30px; border-radius: 4px;
+  position: relative; text-align: center;
+  transform: translateY(20px); transition: transform 0.3s ease;
+}
+.dl-modal.active .dl-modal-content { transform: translateY(0); }
+
+.dl-modal-close {
+  position: absolute; top: 15px; right: 20px;
+  background: transparent; border: none;
+  color: var(--text-muted); font-size: 24px; cursor: pointer;
+  transition: color 0.2s;
+}
+.dl-modal-close:hover { color: var(--gold-light); }
+
+.dl-modal-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px; color: var(--white); margin-bottom: 6px;
+}
+.dl-modal-author { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+
+/* بادجات الحالة الذكية */
+.badge { display: inline-block; padding: 6px 14px; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; border-radius: 20px; margin-bottom: 20px; }
+.badge.checking { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px dashed rgba(255,255,255,0.2); }
+.badge.free { background: rgba(47, 122, 60, 0.15); color: #4ade80; border: 1px solid #2f7a3c; }
+.badge.borrow { background: rgba(161, 63, 28, 0.15); color: #fb923c; border: 1px solid #a13f1c; }
+.badge.none { background: rgba(255,255,255,0.05); color: #94a3b8; }
+
+.dl-action-btn {
+  width: 100%; padding: 16px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  border: none; border-radius: 2px; color: var(--navy);
+  font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
+  transition: all 0.3s;
+}
+.dl-action-btn:disabled { background: var(--navy-light); color: var(--text-muted); cursor: not-allowed; border: 1px solid rgba(255,255,255,0.05); }
+.dl-action-btn:not(:disabled):hover { filter: brightness(1.1); box-shadow: 0 4px 20px rgba(201,168,76,0.3); }
+
+.dl-status-msg { font-size: 12px; color: var(--gold-pale); margin-top: 14px; min-height: 18px; }
 </style>
 </head>
 <body>
@@ -969,8 +1026,7 @@ footer {
     <a href="#" class="view-all reveal" onclick="quickSearch('Classic')">View All Collection →</a>
   </div>
 
-  <div class="books-grid" id="booksGridContainer">
-    </div>
+  <div class="books-grid" id="booksGridContainer"></div>
 </section>
 
 <section class="trending" id="trending">
@@ -983,535 +1039,385 @@ footer {
   </div>
 
   <div class="trending-grid">
-    <div class="trending-list" id="trendingListContainer">
-       </div>
-
-    <div class="featured-panel reveal" id="editorsPickContainer">
-      <img class="featured-panel-img" src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=700&q=80&auto=format&fit=crop" alt="Featured Book" id="editorImg">
-      <div class="featured-panel-overlay">
-        <div class="featured-panel-badge">Editor's Pick of the Month</div>
-        <div class="featured-panel-title" id="editorTitle">The Architecture of Memory</div>
-        <div class="featured-panel-author" id="editorAuthor">by Isabelle Moreau · Cognitive Science</div>
-        <div class="featured-panel-desc" id="editorDesc">A groundbreaking journey into how the human mind constructs, stores, and retrieves memories — blending neuroscience with narrative storytelling.</div>
-        <button class="btn-outline-gold" id="editorDownloadBtn">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
-          </svg>
-          Download Book
-        </button>
-      </div>
-    </div>
+    <div class="trending-list" id="trendingListContainer"></div>
+    <div class="featured-panel reveal" id="featuredPanelContainer"></div>
   </div>
 </section>
 
 <section class="cta-section" id="cta">
-  <div class="cta-tag reveal">
-    <span style="width:24px;height:1px;background:var(--gold);display:block"></span>
-    Stay Informed
-    <span style="width:24px;height:1px;background:var(--gold);display:block"></span>
-  </div>
-  <h2 class="cta-title reveal">Never Miss a New<br><span style="font-style:italic;color:var(--gold-light)">Release Again</span></h2>
-  <p class="cta-subtitle reveal">Subscribe to our weekly digest and receive curated recommendations, new arrivals, and exclusive reading lists tailored to your tastes.</p>
-
+  <div class="cta-tag reveal">Join the Elite Club</div>
+  <h2 class="cta-title reveal">Subscribe to Our <span class="italic">Literary</span> Letters</h2>
+  <p class="cta-subtitle reveal">Receive regular digests of rare finds, new releases, and deep analytical articles from our expert librarians.</p>
   <div class="newsletter-form reveal">
-    <input class="newsletter-input" type="email" placeholder="Your email address...">
+    <input type="email" class="newsletter-input" placeholder="Your premium email address...">
     <button class="newsletter-submit">Subscribe</button>
   </div>
-  <p class="cta-disclaimer reveal">No spam. Unsubscribe at any time. We respect your privacy.</p>
+  <p class="cta-disclaimer reveal">We respect your privacy. Unsubscribe at any time.</p>
 </section>
 
 <footer id="footer">
   <div class="footer-grid">
     <div>
       <span class="footer-brand-logo">LEXICON</span>
-      <p class="footer-brand-desc">The world's most elegant digital library. Curating knowledge across every discipline, accessible to every curious mind on the planet.</p>
+      <p class="footer-brand-desc">Providing barrier-free access to global knowledge, culture, and high-fidelity literature for over a decade.</p>
       <div class="footer-socials">
-        <a class="social-btn" href="#" aria-label="Twitter">𝕏</a>
-        <a class="social-btn" href="#" aria-label="Instagram">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-          </svg>
-        </a>
-        <a class="social-btn" href="#" aria-label="LinkedIn">in</a>
-        <a class="social-btn" href="#" aria-label="YouTube">▶</a>
-        <a class="social-btn" href="#" aria-label="Facebook">f</a>
+        <a href="#" class="social-btn">Tw</a>
+        <a href="#" class="social-btn">Fb</a>
+        <a href="#" class="social-btn">In</a>
       </div>
     </div>
-
     <div>
-      <div class="footer-col-title">Explore</div>
+      <div class="footer-col-title">Navigation</div>
       <ul class="footer-links">
-        <li><a href="#">Browse All Books</a></li>
-        <li><a href="#">New Arrivals</a></li>
-        <li><a href="#">Bestsellers</a></li>
-        <li><a href="#">Award Winners</a></li>
-        <li><a href="#">Free Reads</a></li>
-        <li><a href="#">Editor's Picks</a></li>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#categories">Categories</a></li>
+        <li><a href="#featured">Books</a></li>
+        <li><a href="#trending">Trending</a></li>
       </ul>
     </div>
-
     <div>
-      <div class="footer-col-title">Company</div>
+      <div class="footer-col-title">Resources</div>
       <ul class="footer-links">
-        <li><a href="#">About LEXICON</a></li>
-        <li><a href="#">Our Mission</a></li>
-        <li><a href="#">Careers</a></li>
-        <li><a href="#">Press & Media</a></li>
-        <li><a href="#">Blog</a></li>
-        <li><a href="#">Contact Us</a></li>
-      </ul>
-    </div>
-
-    <div>
-      <div class="footer-col-title">Support</div>
-      <ul class="footer-links">
-        <li><a href="#">Help Centre</a></li>
-        <li><a href="#">Reading Apps</a></li>
+        <li><a href="#">Public Domain</a></li>
+        <li><a href="#">Research Papers</a></li>
         <li><a href="#">API Access</a></li>
-        <li><a href="#">Publishers</a></li>
-        <li><a href="#">Accessibility</a></li>
-        <li><a href="#">Status</a></li>
+        <li><a href="#">Help Center</a></li>
       </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Office</div>
+      <p style="font-size:13px; color:var(--text-muted); line-height:1.8; font-weight:300;">
+        750 Library Way,<br>
+        Suite 400, Knowledge City,<br>
+        KC 90210
+      </p>
     </div>
   </div>
-
   <div class="footer-bottom">
-    <p class="footer-copy">© 2026 LEXICON Digital Library. All rights reserved.</p>
+    <p class="footer-copy">&copy; 2026 LEXICON Digital Library System. Built for Infinite Minds.</p>
     <div class="footer-legal">
       <a href="#">Privacy Policy</a>
-      <a href="#">Terms of Use</a>
-      <a href="#">Cookie Settings</a>
+      <a href="#">Terms of Service</a>
     </div>
   </div>
 </footer>
 
+<div class="dl-modal" id="smartDownloadModal">
+  <div class="dl-modal-content">
+    <button class="dl-modal-close" onclick="closeDownloadModal()">&times;</button>
+    <h3 class="dl-modal-title" id="modalBookTitle">Book Title</h3>
+    <p class="dl-modal-author" id="modalBookAuthor">By Author Name</p>
+    <span class="badge checking" id="modalBadge">Checking server availability...</span>
+    <button class="dl-action-btn" id="modalActionBtn" disabled>Preparing Secure Link...</button>
+    <div class="dl-status-msg" id="modalStatusMsg"></div>
+  </div>
+</div>
+
 <script>
-// ── Scroll reveal
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+// ─── CORE SITE ENGINE & API INTEGRATION ─────────────────
+const API_URL = 'https://openlibrary.org/search.json';
+const DEFAULT_QUERY = 'Classic';
 
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-// ── Navbar scroll shrink
-window.addEventListener('scroll', () => {
-  const nav = document.getElementById('navbar');
-  nav.style.height = window.scrollY > 60 ? '60px' : '72px';
-  nav.style.background = window.scrollY > 60 ? 'rgba(6,14,26,0.97)' : 'rgba(10,22,40,0.85)';
+document.addEventListener('DOMContentLoaded', () => {
+  fetchBooks(DEFAULT_QUERY);
+  initScrollReveal();
+  setupSearch();
+  animateStats();
 });
 
-// ── Counter animation
-function animateCounter(el) {
-  const target = parseInt(el.dataset.target);
-  const duration = 2000;
-  const start = performance.now();
-  const format = n => n >= 1000000 ? (n/1000000).toFixed(1)+'M' : n >= 1000 ? (n/1000).toFixed(0)+'K' : n.toString();
-
-  function tick(now) {
-    const elapsed = now - start;
-    const progress = Math.min(elapsed / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    el.textContent = format(Math.floor(eased * target));
-    if (progress < 1) requestAnimationFrame(tick);
-    else el.textContent = format(target);
-  }
-  requestAnimationFrame(tick);
-}
-
-const counterObserver = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      animateCounter(e.target);
-      counterObserver.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.5 });
-
-document.querySelectorAll('.stat-number[data-target]').forEach(el => counterObserver.observe(el));
-
-// ── Mobile menu toggle
-function toggleMenu() {
-  const links = document.querySelector('.nav-links');
-  if (links) {
-    const open = links.style.display === 'flex';
-    links.style.cssText = open ? '' : `
-      display:flex; flex-direction:column; position:fixed;
-      top:72px; left:0; right:0; background:rgba(6,14,26,0.98);
-      backdrop-filter:blur(20px); padding:32px 5%; gap:24px;
-      border-bottom:1px solid rgba(201,168,76,0.15); z-index:99;
-    `;
-  }
-}
-
-/* ─── API BOOK LOADER (AXIOS & FETCH) ────────────────── */
-
-const fallbackCovers = [
-  "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1495640388908-05fa85288e61?w=400&q=80&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&q=80&auto=format&fit=crop"
-];
-
-const generateRandomMeta = (index) => {
-  return {
-    rating: (4.5 + Math.random() * 0.5).toFixed(1),
-    pages: Math.floor(280 + Math.random() * 300) + " pages",
-    badge: index === 0 ? "Bestseller" : index === 1 ? "New" : index === 2 ? "Award" : "Editor's Pick"
-  };
-};
-
-/* ─── DOWNLOAD MODAL ────────────────────────────── */
-function showDownloadModal(state, title = '', formats = []) {
-  let modal = document.getElementById('downloadModal');
-  if (!modal) {
-    modal = document.createElement('div');
-    modal.id = 'downloadModal';
-    modal.style.cssText = `
-      position:fixed; inset:0; z-index:9999;
-      display:flex; align-items:center; justify-content:center;
-      background:rgba(6,14,26,0.85); backdrop-filter:blur(12px);
-      opacity:0; transition:opacity 0.3s;
-    `;
-    modal.innerHTML = `
-      <div style="
-        background:var(--navy-light); border:1px solid rgba(201,168,76,0.3);
-        border-radius:6px; padding:44px 40px; max-width:420px; width:90%;
-        text-align:center; box-shadow:0 40px 80px rgba(0,0,0,0.6);
-        transform:translateY(16px); transition:transform 0.3s;
-      " id="downloadModalBox">
-        <div id="downloadModalIcon" style="font-size:48px; margin-bottom:20px;">⏳</div>
-        <div id="downloadModalTitle" style="
-          font-family:'Cormorant Garamond',serif; font-size:22px;
-          color:var(--white); margin-bottom:10px; font-weight:600;
-        "></div>
-        <div id="downloadModalSub" style="
-          font-size:13px; color:var(--text-muted); margin-bottom:28px; line-height:1.7;
-        "></div>
-        <div id="downloadModalBtns" style="display:flex; flex-direction:column; gap:10px;"></div>
-        <button onclick="closeDownloadModal()" style="
-          margin-top:20px; background:none; border:none; cursor:pointer;
-          color:rgba(255,255,255,0.3); font-size:12px; letter-spacing:2px;
-          text-transform:uppercase; font-family:'Outfit',sans-serif;
-          transition:color 0.2s;
-        " onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">
-          ✕ Close
-        </button>
-      </div>
-    `;
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeDownloadModal(); });
-    document.body.appendChild(modal);
-  }
-
-  const icon = document.getElementById('downloadModalIcon');
-  const titleEl = document.getElementById('downloadModalTitle');
-  const sub = document.getElementById('downloadModalSub');
-  const btns = document.getElementById('downloadModalBtns');
-  const box = document.getElementById('downloadModalBox');
-
-  btns.innerHTML = '';
-
-  if (state === 'loading') {
-    icon.innerHTML = `<svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="26" cy="26" r="22" stroke="rgba(201,168,76,0.2)" stroke-width="3"/>
-      <path d="M26 4 A22 22 0 0 1 48 26" stroke="var(--gold-light)" stroke-width="3" stroke-linecap="round">
-        <animateTransform attributeName="transform" type="rotate" from="0 26 26" to="360 26 26" dur="0.9s" repeatCount="indefinite"/>
-      </path>
-    </svg>`;
-    titleEl.textContent = title || 'Searching for download...';
-    sub.textContent = 'Connecting to archive repositories. Please wait a moment.';
-  } else if (state === 'formats') {
-    icon.innerHTML = `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--gold-light)" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>`;
-    titleEl.textContent = title;
-    sub.textContent = 'Choose your preferred format to download directly to your device.';
-    formats.forEach(f => {
-      const btn = document.createElement('a');
-      btn.href = f.url;
-      btn.download = '';
-      btn.target = '_blank';
-      btn.rel = 'noopener noreferrer';
-      btn.style.cssText = `
-        display:flex; align-items:center; justify-content:space-between;
-        padding:14px 20px;
-        background:rgba(201,168,76,0.07); border:1px solid rgba(201,168,76,0.25);
-        border-radius:4px; text-decoration:none; color:var(--white);
-        font-family:'Outfit',sans-serif; font-size:13px; font-weight:500;
-        letter-spacing:1px; text-transform:uppercase; transition:all 0.2s;
-        cursor:pointer;
-      `;
-      btn.innerHTML = `
-        <span style="display:flex;align-items:center;gap:12px;">
-          <span style="color:var(--gold-light);font-size:18px;">${f.icon}</span>
-          ${f.label}
-        </span>
-        <span style="color:var(--text-muted);font-size:11px;">Download ↓</span>
-      `;
-      btn.onmouseover = () => { btn.style.background = 'rgba(201,168,76,0.15)'; btn.style.borderColor = 'rgba(201,168,76,0.5)'; };
-      btn.onmouseout = () => { btn.style.background = 'rgba(201,168,76,0.07)'; btn.style.borderColor = 'rgba(201,168,76,0.25)'; };
-      btns.appendChild(btn);
-    });
-  } else if (state === 'error') {
-    icon.innerHTML = '📚';
-    titleEl.textContent = 'Not Available for Download';
-    sub.textContent = title || 'This book is under copyright or not available in the public archive. You can still read it online.';
-    if (formats.length > 0) {
-      const btn = document.createElement('a');
-      btn.href = formats[0].url;
-      btn.target = '_blank';
-      btn.rel = 'noopener noreferrer';
-      btn.style.cssText = `
-        display:flex; align-items:center; justify-content:center; gap:8px;
-        padding:14px 20px;
-        background:transparent; border:1px solid var(--gold);
-        border-radius:4px; text-decoration:none; color:var(--gold-light);
-        font-family:'Outfit',sans-serif; font-size:12px; font-weight:500;
-        letter-spacing:2px; text-transform:uppercase; transition:all 0.2s; cursor:pointer;
-      `;
-      btn.textContent = 'Read Online on Open Library →';
-      btn.onmouseover = () => btn.style.background = 'rgba(201,168,76,0.1)';
-      btn.onmouseout = () => btn.style.background = 'transparent';
-      btns.appendChild(btn);
-    }
-  }
-
-  modal.style.display = 'flex';
-  requestAnimationFrame(() => {
-    modal.style.opacity = '1';
-    box.style.transform = 'translateY(0)';
-  });
-}
-
-function closeDownloadModal() {
-  const modal = document.getElementById('downloadModal');
-  if (modal) {
-    modal.style.opacity = '0';
-    setTimeout(() => { modal.style.display = 'none'; }, 300);
-  }
-}
-
-/* ─── MAIN DOWNLOAD FUNCTION ─────────────────────── */
-async function downloadBook(bookKey, bookTitle) {
-  showDownloadModal('loading', bookTitle);
-
+// جلب الكتب وعرضها مع الحفاظ على البيانات الأساسية ومؤثرات العرض
+async function fetchBooks(query) {
+  const container = document.getElementById('booksGridContainer');
+  if(!container) return;
+  
+  container.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:var(--gold); font-style:italic;">Seeking volumes from the archives...</p>`;
+  
   try {
-    // جلب معلومات الكتاب من Open Library
-    const bookRes = await fetch(`https://openlibrary.org${bookKey}.json`);
-    const bookData = await bookRes.json();
-
-    const ocaid = bookData.ocaid;
-
-    // إذا ماكانش OCAID — الكتاب مش في Archive.org
-    if (!ocaid) {
-      showDownloadModal('error',
-        'This edition is not available in the public archive for direct download.',
-        [{ url: `https://openlibrary.org${bookKey}` }]
-      );
-      return;
-    }
-
-    // جلب قائمة الملفات من Archive.org
-    const filesRes = await fetch(`https://archive.org/metadata/${ocaid}/files`);
-    const filesData = await filesRes.json();
-
-    if (!filesData.result || filesData.result.length === 0) {
-      showDownloadModal('error',
-        'No downloadable files found in the archive.',
-        [{ url: `https://openlibrary.org${bookKey}` }]
-      );
-      return;
-    }
-
-    const files = filesData.result;
-
-    // إيجاد الملفات المتاحة
-    const formatPriority = [
-      { ext: '.pdf',  label: 'PDF Document',  icon: '📄' },
-      { ext: '.epub', label: 'EPUB eBook',     icon: '📱' },
-      { ext: '.txt',  label: 'Plain Text',     icon: '📝' },
-      { ext: '.djvu', label: 'DjVu Format',    icon: '📋' },
-    ];
-
-    const availableFormats = [];
-    formatPriority.forEach(fmt => {
-      const found = files.find(f =>
-        f.name.toLowerCase().endsWith(fmt.ext) &&
-        !f.name.includes('_meta') &&
-        !f.name.includes('_archive')
-      );
-      if (found) {
-        availableFormats.push({
-          label: fmt.label,
-          icon: fmt.icon,
-          url: `https://archive.org/download/${ocaid}/${found.name}`
-        });
-      }
-    });
-
-    if (availableFormats.length === 0) {
-      showDownloadModal('error',
-        'Files found in archive but no standard formats (PDF/EPUB) available.',
-        [{ url: `https://openlibrary.org${bookKey}` }]
-      );
-      return;
-    }
-
-    // عرض الفورماتات للتحميل
-    showDownloadModal('formats', bookTitle || bookData.title || 'Download Book', availableFormats);
-
-  } catch (err) {
-    console.error('Download error:', err);
-    showDownloadModal('error',
-      'A network error occurred. Please check your connection and try again.',
-      [{ url: `https://openlibrary.org${bookKey}` }]
-    );
-  }
-}
-
-// للتوافق مع كود الـ trending items اللي كيستعمل redirectToBook
-function redirectToBook(bookKey, bookTitle) {
-  downloadBook(bookKey, bookTitle);
-}
-
-/**
- * 1. AUTOMATED LOADING VIA AXIOS
- */
-async function loadLibraryCollection(query = "philosophy") {
-  const gridContainer = document.getElementById("booksGridContainer");
-  gridContainer.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:var(--gold-light);">Curating books from global repositories...</p>`;
-
-  try {
-    const response = await axios.get(`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=8`);
-    const books = response.data.docs;
-
-    gridContainer.innerHTML = "";
+    const response = await axios.get(`${API_URL}?q=${encodeURIComponent(query)}&limit=8`);
+    const docs = response.data.docs;
+    container.innerHTML = '';
     
-    if(!books || books.length === 0) {
-       gridContainer.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:var(--text-muted);">No books found for "${query}". Try another query!</p>`;
-       return;
+    if(!docs || docs.length === 0) {
+      container.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:var(--text-muted);">No matching volumes found in our primary indices.</p>`;
+      return;
     }
+    
+    docs.forEach(book => {
+      const coverId = book.cover_i;
+      const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-m.jpg` : 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400&q=80&auto=format&fit=crop';
+      const rating = book.ratings_average ? book.ratings_average.toFixed(1) : (3.5 + Math.random() * 1.5).toFixed(1);
+      const pages = book.number_of_pages_median ? `${book.number_of_pages_median} pages` : 'Varying editions';
+      const author = book.author_name ? book.author_name.join(', ') : 'Unknown Author';
+      const category = book.subject ? book.subject[0] : 'General Literature';
+      
+      // تحويل البيانات لنص آمن لاستعمالها في جافاسكريبت
+      const safeTitle = (book.title || 'Untitled').replace(/'/g, "\\'");
+      const safeAuthor = author.replace(/'/g, "\\'");
+      const rawIa = book.ia ? JSON.stringify(book.ia) : '[]';
 
-    const mainGridItems = books.slice(0, 4);
-    mainGridItems.forEach((book, idx) => {
-      const meta = generateRandomMeta(idx);
-      const author = book.author_name ? book.author_name[0] : "Unknown Author";
-      const genre = book.subject ? book.subject[0] : "General Knowledge";
-      const coverUrl = book.cover_i 
-        ? `https://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg` 
-        : fallbackCovers[idx % fallbackCovers.length];
-
-      const card = document.createElement("div");
-      card.className = "book-card reveal visible";
+      const card = document.createElement('div');
+      card.className = 'book-card reveal';
       card.innerHTML = `
         <div class="book-cover">
-          <img src="${coverUrl}" alt="${book.title}" onerror="this.src='${fallbackCovers[idx % fallbackCovers.length]}'">
-          <div class="book-badge">${meta.badge}</div>
+          <img src="${coverUrl}" alt="${book.title}" loading="lazy">
+          <span class="book-badge">Library Archive</span>
           <div class="book-overlay">
-            <button class="btn-read" onclick="downloadBook('${book.key}', this.dataset.title)" data-title="${book.title.replace(/"/g, '&quot;')}">⬇ Download</button>
+            <button class="btn-read" onclick="openSmartDownload('${safeTitle}', '${safeAuthor}', ${rawIa})">Read Now</button>
           </div>
         </div>
         <div class="book-info">
-          <div class="book-category">${genre}</div>
-          <div class="book-title" title="${book.title}">${book.title}</div>
-          <div class="book-author">by ${author}</div>
+          <div class="book-category">${category}</div>
+          <h3 class="book-title" title="${book.title}">${book.title}</h3>
+          <div class="book-author" title="${author}">${author}</div>
           <div class="book-footer">
-            <div class="book-rating"><span style="color:var(--gold-light)">★</span> ${meta.rating}</div>
-            <div class="book-pages">${meta.pages}</div>
+            <div class="book-rating">★ <span>${rating}</span></div>
+            <div class="book-pages">${pages}</div>
           </div>
         </div>
       `;
-      gridContainer.appendChild(card);
+      container.appendChild(card);
     });
-
-    if(books[4]) {
-       const b = books[4];
-       document.getElementById("editorTitle").textContent = b.title;
-       document.getElementById("editorAuthor").textContent = `by ${b.author_name ? b.author_name[0] : 'Classic Genius'} · ${b.subject ? b.subject[0] : 'Literature'}`;
-       document.getElementById("editorDesc").textContent = b.first_sentence ? b.first_sentence[0] : "Explore this critically acclaimed absolute masterpiece from our premium archives. Now accessible without geographic limits.";
-       if(b.cover_i) {
-         document.getElementById("editorImg").src = `https://covers.openlibrary.org/b/id/${b.cover_i}-L.jpg`;
-       }
-       document.getElementById("editorDownloadBtn").onclick = () => downloadBook(b.key, b.title);
-    }
-
+    
+    // رندر قائمة الكتب الأكثر قراءة ولوحة العرض الجانبية بناءً على البيانات المسترجعة
+    renderTrendingAndFeaturedPanel(docs);
+    
+    setTimeout(() => { refreshScrollReveal(); }, 100);
   } catch (error) {
-    console.error("Axios error: ", error);
-    gridContainer.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:red;">Connection interrupted while compiling digital stacks.</p>`;
+    console.error('Error fetching data:', error);
+    container.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:#ff6b6b;">Failed to establish connection with the central library index.</p>`;
   }
 }
 
-/**
- * 2. AUTOMATED LOADING VIA FETCH API
- */
-function loadTrendingEntries(subject = "popular") {
-  const trendContainer = document.getElementById("trendingListContainer");
+function renderTrendingAndFeaturedPanel(docs) {
+  const trendContainer = document.getElementById('trendingListContainer');
+  const featContainer = document.getElementById('featuredPanelContainer');
+  if(!trendContainer || !featContainer || docs.length < 2) return;
   
-  fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(subject)}&limit=4`)
-    .then(response => {
-      if (!response.ok) throw new Error("Network latency detected.");
-      return response.json();
-    })
-    .then(data => {
-      const items = data.docs;
-      trendContainer.innerHTML = "";
-      
-      items.forEach((book, idx) => {
-        const author = book.author_name ? book.author_name[0] : "Anonymous";
-        const category = book.subject ? book.subject[0] : "Global Trending";
-        const coverUrl = book.cover_i 
-          ? `https://covers.openlibrary.org/b/id/${book.cover_i}-S.jpg` 
-          : fallbackCovers[idx % fallbackCovers.length];
-        
-        const rank = "0" + (idx + 1);
+  trendContainer.innerHTML = '';
+  const trendDocs = docs.slice(0, 4);
+  
+  trendDocs.forEach((book, index) => {
+    const coverId = book.cover_i;
+    const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-s.jpg` : 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=100&q=80&auto=format&fit=crop';
+    const author = book.author_name ? book.author_name.join(', ') : 'Unknown';
+    const category = book.subject ? book.subject[0] : 'General';
+    
+    const safeTitle = (book.title || 'Untitled').replace(/'/g, "\\'");
+    const safeAuthor = author.replace(/'/g, "\\'");
+    const rawIa = book.ia ? JSON.stringify(book.ia) : '[]';
 
-        const trendItem = document.createElement("div");
-        trendItem.className = "trending-item reveal visible";
-        trendItem.onclick = () => downloadBook(book.key, book.title);
-        trendItem.innerHTML = `
-          <div class="trending-rank">${rank}</div>
-          <div class="trending-cover">
-            <img src="${coverUrl}" alt="${book.title}" onerror="this.src='${fallbackCovers[idx % fallbackCovers.length]}'">
-          </div>
-          <div class="trending-info">
-            <div class="trending-cat">${category}</div>
-            <div class="trending-title" title="${book.title}">${book.title}</div>
-            <div class="trending-author">by ${author}</div>
-          </div>
-          <div class="trending-arrow">→</div>
-        `;
-        trendContainer.appendChild(trendItem);
-      });
-    })
-    .catch(err => {
-      console.error("Fetch failure: ", err);
-      trendContainer.innerHTML = `<p style="color: var(--text-muted);">Failed to sync live trending data pipelines.</p>`;
-    });
+    const item = document.createElement('div');
+    item.className = 'trending-item reveal';
+    item.onclick = () => openSmartDownload(safeTitle, safeAuthor, rawIa);
+    item.innerHTML = `
+      <div class="trending-rank">0${index+1}</div>
+      <div class="trending-cover"><img src="${coverUrl}" alt="${book.title}"></div>
+      <div class="trending-info">
+        <div class="trending-cat">${category}</div>
+        <h4 class="trending-title">${book.title}</h4>
+        <div class="trending-author">By ${author}</div>
+      </div>
+      <div class="trending-arrow">→</div>
+    `;
+    trendContainer.appendChild(item);
+  });
+  
+  const fBook = docs[docs.length - 1];
+  const fCoverId = fBook.cover_i;
+  const fCoverUrl = fCoverId ? `https://covers.openlibrary.org/b/id/${fCoverId}-l.jpg` : 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=800&q=80&auto=format&fit=crop';
+  const fAuthor = fBook.author_name ? fBook.author_name.join(', ') : 'Unknown Master';
+  const fDesc = fBook.first_sentence ? fBook.first_sentence[0] : 'An exceptional masterpiece curated from our standard collections, selected for high academic and conceptual resonance.';
+  
+  const safeFTitle = (fBook.title || 'Untitled').replace(/'/g, "\\'");
+  const safeFAuthor = fAuthor.replace(/'/g, "\\'");
+  const rawFIa = fBook.ia ? JSON.stringify(fBook.ia) : '[]';
+
+  featContainer.innerHTML = `
+    <img src="${fCoverUrl}" alt="Featured Panel Image" class="featured-panel-img">
+    <div class="featured-panel-overlay">
+      <span class="featured-panel-badge">Manifested Choice</span>
+      <h3 class="featured-panel-title">${fBook.title}</h3>
+      <div class="featured-panel-author">By ${fAuthor}</div>
+      <p class="featured-panel-desc">${fDesc}</p>
+      <button class="btn-outline-gold" onclick="openSmartDownload('${safeFTitle}', '${safeFAuthor}', ${rawFIa})">Access Volume</button>
+    </div>
+  `;
 }
 
-// ── Search Functions
-function executeSearch() {
-  const searchInput = document.getElementById("searchInput");
-  const value = searchInput.value.trim();
-  if(value) {
-     document.getElementById("featured-title-text").innerHTML = `<span class="italic">Search Results for</span> "${value}"`;
-     loadLibraryCollection(value);
-     loadTrendingEntries(value);
-     document.getElementById("featured").scrollIntoView({ behavior: 'smooth' });
+// ─── SMART SYSTEM FOR FILE DOWNLOADS (نظام التحميل الذكي بدون التوجيه للخارج) ───
+function openSmartDownload(title, author, iaList) {
+  const modal = document.getElementById('smartDownloadModal');
+  const mTitle = document.getElementById('modalBookTitle');
+  const mAuthor = document.getElementById('modalBookAuthor');
+  const mBadge = document.getElementById('modalBadge');
+  const mBtn = document.getElementById('modalActionBtn');
+  const mStatus = document.getElementById('modalStatusMsg');
+
+  mTitle.textContent = title;
+  mAuthor.textContent = `By ${author}`;
+  mStatus.textContent = '';
+  
+  mBadge.textContent = 'Scanning Archive Servers... ⏳';
+  mBadge.className = 'badge checking';
+  
+  mBtn.textContent = 'Analyzing availability...';
+  mBtn.disabled = true;
+  mBtn.onclick = null;
+
+  modal.classList.add('active');
+
+  // إذا لم يحتوي الكتاب على أي معرف لسيرفرات التحميل الذكية
+  if (!iaList || !iaList.length) {
+    mBadge.textContent = 'Digital copy unindexed';
+    mBadge.className = 'badge none';
+    mBtn.textContent = 'Unavailable for Direct Download';
+    mStatus.textContent = 'We could not locate a matching open-access payload for this specific edition.';
+    return;
+  }
+
+  const iaId = iaList[0];
+  checkArchiveServer(iaId, mBadge, mBtn, mStatus);
+}
+
+async function checkArchiveServer(iaId, badge, btn, statusMsg) {
+  try {
+    const metaRes = await axios.get(`https://archive.org/metadata/${iaId}`);
+    const meta = metaRes.data;
+    const restricted = meta.metadata && meta.metadata['access-restricted-item'] === 'true';
+    const file = (meta.files || []).find(f =>
+      f.format && /PDF|EPUB/i.test(f.format) && !/thumb|tile/i.test(f.name || '')
+    );
+
+    if (!restricted && file) {
+      const fileUrl = `https://archive.org/download/${iaId}/${encodeURIComponent(file.name)}`;
+      badge.textContent = 'Direct Download Available 🔓';
+      badge.className = 'badge free';
+      btn.textContent = `Download Volume (${file.format})`;
+      btn.disabled = false;
+      btn.onclick = () => triggerSecureDownload(fileUrl, file.name, statusMsg);
+    } else {
+      badge.textContent = 'Protected Work (Online Borrow) 🔒';
+      badge.className = 'badge borrow';
+      btn.textContent = 'Read & Borrow Volume Online';
+      btn.disabled = false;
+      btn.onclick = () => window.open(`https://archive.org/details/${iaId}`, '_blank');
+    }
+  } catch (error) {
+    badge.textContent = 'Connection Timeout';
+    badge.className = 'badge none';
+    btn.textContent = 'Unable to Verify Link';
+    statusMsg.textContent = 'Error pinging storage clusters. Please try again shortly.';
+  }
+}
+
+async function triggerSecureDownload(url, filename, statusElement) {
+  statusElement.textContent = '⏳ Initializing secure payload buffer, please hold...';
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error();
+    const blob = await response.blob();
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    statusElement.textContent = 'Download pipeline established successfully! ✅';
+  } catch (e) {
+    // تخطي حماية المتصفح (CORS Fallback) وفتح الرابط الخام فوراً في نافذة منفصلة صافية للتحميل
+    statusElement.textContent = 'Routing connection directly to master source cloud...';
+    window.open(url, '_blank');
+  }
+}
+
+function closeDownloadModal() {
+  document.getElementById('smartDownloadModal').classList.remove('active');
+}
+
+// إغلاق النافذة المنبثقة عند الضغط خارجها
+window.addEventListener('click', (e) => {
+  const modal = document.getElementById('smartDownloadModal');
+  if (e.target === modal) closeDownloadModal();
+});
+
+// ─── COMPLEMENTARY UX SYSTEMS ─────────────────────────
+function setupSearch() {
+  const input = document.getElementById('searchInput');
+  const btn = document.getElementById('searchBtn');
+  
+  if(btn && input) {
+    btn.addEventListener('click', () => {
+      const q = input.value.trim();
+      if(q) {
+        document.getElementById('featured-title-text').innerHTML = `<span class="italic">Search Results For:</span> ${q}`;
+        fetchBooks(q);
+        document.getElementById('featured').scrollIntoView();
+      }
+    });
+    input.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter') btn.click();
+    });
   }
 }
 
 function quickSearch(tag) {
-  document.getElementById("searchInput").value = tag;
-  executeSearch();
+  const input = document.getElementById('searchInput');
+  if(input) input.value = tag;
+  document.getElementById('featured-title-text').innerHTML = `<span class="italic">Curated Genre:</span> ${tag}`;
+  fetchBooks(tag);
+  document.getElementById('featured').scrollIntoView();
 }
 
-document.getElementById("searchBtn").addEventListener("click", executeSearch);
-document.getElementById("searchInput").addEventListener("keypress", (e) => {
-  if(e.key === 'Enter') executeSearch();
-});
+function toggleMenu() {
+  const links = document.querySelector('.nav-links');
+  if(links) links.style.display = (links.style.display === 'flex') ? 'none' : 'flex';
+}
 
-window.addEventListener("DOMContentLoaded", () => {
-   loadLibraryCollection("classic fiction");
-   loadTrendingEntries("science history");
-});
+function initScrollReveal() {
+  window.addEventListener('scroll', refreshScrollReveal);
+  refreshScrollReveal();
+}
+
+function refreshScrollReveal() {
+  const reveals = document.querySelectorAll('.reveal');
+  reveals.forEach(el => {
+    const windowHeight = window.innerHeight;
+    const elementTop = el.getBoundingClientRect().top;
+    const elementVisible = 100;
+    if (elementTop < windowHeight - elementVisible) {
+      el.classList.add('visible');
+    }
+  });
+}
+
+function animateStats() {
+  const stats = document.querySelectorAll('.stat-number');
+  const speed = 200;
+  
+  const startCounter = (el) => {
+    const target = +el.getAttribute('data-target');
+    const count = +el.innerText;
+    const inc = target / speed;
+    
+    if (count < target) {
+      el.innerText = Math.ceil(count + inc);
+      setTimeout(() => startCounter(el), 15);
+    } else {
+      el.innerText = target.toLocaleString();
+    }
+  };
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting) {
+        startCounter(entry.target);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  
+  stats.forEach(stat => observer.observe(stat));
+}
 </script>
 </body>
 </html>
