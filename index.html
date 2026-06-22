@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,15 +26,15 @@
   --shadow-gold: 0 0 40px rgba(201,168,76,0.15);
   --shadow-deep: 0 20px 60px rgba(0,0,0,0.5);
 }
-
+ 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body { font-family: 'Outfit', sans-serif; background: var(--navy); color: var(--white); overflow-x: hidden; }
-
+ 
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--navy); }
 ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
-
+ 
 /* ─── NAVBAR ─── */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -60,7 +61,7 @@ nav {
 .nav-links a:hover::after { width: 100%; }
 .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
 .hamburger span { width: 24px; height: 1.5px; background: var(--gold-light); transition: all 0.3s; }
-
+ 
 /* ─── HERO ─── */
 .hero { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
 .hero-bg {
@@ -151,7 +152,7 @@ nav {
   animation: scrollDrop 2s ease-in-out infinite;
 }
 @keyframes scrollDrop { 0%,100% { transform: scaleY(1); opacity:1; } 50% { transform: scaleY(0.4); opacity: 0.4; } }
-
+ 
 /* ─── SECTION SHELL ─── */
 section { padding: 100px 5%; }
 .section-label {
@@ -166,7 +167,7 @@ section { padding: 100px 5%; }
 }
 .section-title .italic { font-style: italic; color: var(--gold-light); }
 .section-desc { font-size: 15px; font-weight: 300; line-height: 1.8; color: var(--text-muted); max-width: 520px; margin-bottom: 60px; }
-
+ 
 /* ─── STATS ─── */
 .stats { background: var(--navy-mid); padding: 70px 5%; position: relative; overflow: hidden; }
 .stats::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
@@ -180,7 +181,7 @@ section { padding: 100px 5%; }
 .stat-item:hover { background: rgba(201,168,76,0.05); }
 .stat-number { font-family: 'Cormorant Garamond', serif; font-size: 52px; font-weight: 600; color: var(--gold-light); line-height: 1; margin-bottom: 8px; letter-spacing: 2px; }
 .stat-label { font-size: 12px; font-weight: 400; letter-spacing: 2.5px; color: var(--text-muted); text-transform: uppercase; }
-
+ 
 /* ─── CATEGORIES ─── */
 .categories-bg { background: var(--navy); }
 .categories-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 14px; }
@@ -207,7 +208,7 @@ section { padding: 100px 5%; }
 .cat-card:hover .cat-icon { background: rgba(201,168,76,0.2); box-shadow: 0 0 20px rgba(201,168,76,0.2); }
 .cat-name { font-size: 13px; font-weight: 500; letter-spacing: 1.5px; color: rgba(255,255,255,0.8); text-transform: uppercase; margin-bottom: 6px; }
 .cat-count { font-size: 11px; color: var(--text-muted); letter-spacing: 1px; }
-
+ 
 /* ─── BOOKS GRID ─── */
 .books-section { background: var(--navy-mid); }
 .books-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px; flex-wrap: wrap; gap: 20px; }
@@ -222,7 +223,7 @@ section { padding: 100px 5%; }
 @media(max-width:1100px) { .books-grid { grid-template-columns: repeat(3, 1fr); } }
 @media(max-width:800px) { .books-grid { grid-template-columns: repeat(2, 1fr); } }
 @media(max-width:500px) { .books-grid { grid-template-columns: 1fr; } }
-
+ 
 .book-card {
   background: var(--navy); border: 1px solid rgba(255,255,255,0.06);
   border-radius: 4px; overflow: hidden;
@@ -264,7 +265,7 @@ section { padding: 100px 5%; }
 .book-footer { display: flex; align-items: center; justify-content: space-between; }
 .book-rating { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gold-light); }
 .book-pages { font-size: 11px; color: var(--text-muted); letter-spacing: 0.5px; }
-
+ 
 /* ─── TRENDING ─── */
 .trending { background: var(--navy); }
 .trending-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
@@ -307,7 +308,7 @@ section { padding: 100px 5%; }
   letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border-radius: 2px; transition: all 0.3s;
 }
 .btn-outline-gold:hover { background: rgba(201,168,76,0.1); box-shadow: var(--shadow-gold); }
-
+ 
 /* ─── MARQUEE ─── */
 .marquee-section { padding: 0; background: var(--navy-mid); border-top: 1px solid rgba(201,168,76,0.1); border-bottom: 1px solid rgba(201,168,76,0.1); overflow: hidden; }
 .marquee-track { display: flex; gap: 0; animation: marqueeSlide 30s linear infinite; width: max-content; }
@@ -318,7 +319,7 @@ section { padding: 100px 5%; }
 }
 .marquee-item .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--gold); opacity: 0.6; }
 @keyframes marqueeSlide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
+ 
 /* ─── CTA ─── */
 .cta-section { background: linear-gradient(135deg, var(--navy-light), var(--navy-soft)); position: relative; overflow: hidden; text-align: center; }
 .cta-section::before {
@@ -335,7 +336,7 @@ section { padding: 100px 5%; }
 .newsletter-submit { padding: 16px 24px; background: linear-gradient(135deg, var(--gold), var(--gold-light)); border: none; cursor: pointer; color: var(--navy); font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s; }
 .newsletter-submit:hover { filter: brightness(1.1); }
 .cta-disclaimer { margin-top: 14px; font-size: 11px; color: rgba(255,255,255,0.3); letter-spacing: 0.5px; }
-
+ 
 /* ─── FOOTER ─── */
 footer { background: #060E1A; padding: 80px 5% 0; border-top: 1px solid rgba(201,168,76,0.12); }
 .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; padding-bottom: 60px; border-bottom: 1px solid rgba(255,255,255,0.05); }
@@ -357,7 +358,7 @@ footer { background: #060E1A; padding: 80px 5% 0; border-top: 1px solid rgba(201
 .footer-legal { display: flex; gap: 24px; }
 .footer-legal a { font-size: 12px; color: rgba(255,255,255,0.25); text-decoration: none; letter-spacing: 0.5px; transition: color 0.2s; }
 .footer-legal a:hover { color: var(--gold); }
-
+ 
 /* ─── SCROLL REVEAL ─── */
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
@@ -365,14 +366,14 @@ footer { background: #060E1A; padding: 80px 5% 0; border-top: 1px solid rgba(201
 .reveal-delay-2 { transition-delay: 0.2s; }
 .reveal-delay-3 { transition-delay: 0.3s; }
 .reveal-delay-4 { transition-delay: 0.4s; }
-
+ 
 @media(max-width:960px) { .nav-links { display: none; } .hamburger { display: flex; } .stats-grid { grid-template-columns: repeat(2, 1fr); } }
 @media(max-width:600px) { section { padding: 70px 5%; } }
-
+ 
 .gold-divider { height: 1px; background: linear-gradient(90deg, transparent 0%, rgba(201,168,76,0.4) 50%, transparent 100%); margin: 0 5%; }
 .strip { background: var(--navy-mid); padding: 14px 5%; display: flex; align-items: center; gap: 12px; font-size: 11px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; border-bottom: 1px solid rgba(201,168,76,0.08); }
 .strip-dot { width: 3px; height: 3px; background: var(--gold); border-radius: 50%; }
-
+ 
 /* ════════════════════════════════════════
    DOWNLOAD MODAL  — same LEXICON theme
 ════════════════════════════════════════ */
@@ -382,7 +383,7 @@ footer { background: #060E1A; padding: 80px 5% 0; border-top: 1px solid rgba(201
   align-items: center; justify-content: center; padding: 20px;
 }
 .dl-overlay.active { display: flex; }
-
+ 
 .dl-modal {
   background: var(--navy-mid);
   border: 1px solid rgba(201,168,76,0.25);
@@ -393,7 +394,7 @@ footer { background: #060E1A; padding: 80px 5% 0; border-top: 1px solid rgba(201
   box-shadow: var(--shadow-deep), var(--shadow-gold);
   overflow: hidden;
 }
-
+ 
 .dl-modal-header {
   display: flex; align-items: flex-start; gap: 16px;
   padding: 24px 28px 20px;
@@ -404,14 +405,14 @@ footer { background: #060E1A; padding: 80px 5% 0; border-top: 1px solid rgba(201
   content: ''; position: absolute; bottom: -1px; left: 10%; right: 10%; height: 1px;
   background: linear-gradient(90deg, transparent, var(--gold), transparent);
 }
-
+ 
 .dl-modal-cover {
   width: 52px; height: 68px; border-radius: 2px; overflow: hidden;
   flex-shrink: 0; background: var(--navy); border: 1px solid rgba(201,168,76,0.15);
 }
 .dl-modal-cover img { width: 100%; height: 100%; object-fit: cover; }
 .dl-modal-cover-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 20px; background: var(--navy-soft); }
-
+ 
 .dl-modal-meta { flex: 1; min-width: 0; padding-top: 2px; }
 .dl-modal-meta h3 {
   font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600;
@@ -419,7 +420,7 @@ footer { background: #060E1A; padding: 80px 5% 0; border-top: 1px solid rgba(201
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 .dl-modal-meta p { font-size: 12px; font-weight: 300; color: var(--text-muted); letter-spacing: 0.5px; }
-
+ 
 .dl-modal-close {
   width: 30px; height: 30px; flex-shrink: 0;
   background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
@@ -427,9 +428,9 @@ footer { background: #060E1A; padding: 80px 5% 0; border-top: 1px solid rgba(201
   display: flex; align-items: center; justify-content: center; transition: all 0.2s; align-self: flex-start;
 }
 .dl-modal-close:hover { background: rgba(201,168,76,0.12); border-color: rgba(201,168,76,0.4); color: var(--gold); }
-
+ 
 .dl-modal-body { padding: 24px 28px; overflow-y: auto; flex: 1; }
-
+ 
 /* Spinner */
 .dl-spinner-wrap { text-align: center; padding: 28px 0; }
 .dl-spinner {
@@ -439,7 +440,7 @@ footer { background: #060E1A; padding: 80px 5% 0; border-top: 1px solid rgba(201
 }
 @keyframes dlSpin { to { transform: rotate(360deg); } }
 .dl-spinner-wrap p { font-size: 13px; font-weight: 300; color: var(--text-muted); letter-spacing: 1px; }
-
+ 
 /* Format label */
 .dl-section-label {
   font-size: 10px; font-weight: 500; letter-spacing: 3px;
@@ -447,7 +448,7 @@ footer { background: #060E1A; padding: 80px 5% 0; border-top: 1px solid rgba(201
   display: flex; align-items: center; gap: 10px;
 }
 .dl-section-label::after { content: ''; flex: 1; height: 1px; background: rgba(201,168,76,0.15); }
-
+ 
 /* Format rows */
 .dl-format-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
 .dl-format-row {
@@ -456,7 +457,7 @@ footer { background: #060E1A; padding: 80px 5% 0; border-top: 1px solid rgba(201
   border-radius: 3px; cursor: pointer; transition: all 0.25s;
 }
 .dl-format-row:hover { background: rgba(201,168,76,0.07); border-color: rgba(201,168,76,0.35); transform: translateX(3px); }
-
+ 
 .dl-fmt-badge {
   padding: 3px 10px; border-radius: 2px;
   font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
@@ -466,21 +467,21 @@ footer { background: #060E1A; padding: 80px 5% 0; border-top: 1px solid rgba(201
 .dl-fmt-epub { background: rgba(80,130,230,0.15); color: #90b8f8; border: 1px solid rgba(80,130,230,0.25); }
 .dl-fmt-txt  { background: rgba(80,180,100,0.15); color: #80c890; border: 1px solid rgba(80,180,100,0.25); }
 .dl-fmt-other{ background: rgba(255,255,255,0.06); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1); }
-
+ 
 .dl-fmt-info { flex: 1; min-width: 0; }
 .dl-fmt-label { font-size: 13px; font-weight: 500; color: var(--white); margin-bottom: 2px; }
 .dl-fmt-name  { font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .dl-fmt-size  { font-size: 11px; color: rgba(255,255,255,0.25); margin-top: 1px; }
-
+ 
 .dl-arrow {
   color: rgba(201,168,76,0.3); font-size: 16px;
   transition: all 0.25s; flex-shrink: 0;
 }
 .dl-format-row:hover .dl-arrow { color: var(--gold); }
-
+ 
 /* Status bar */
 .dl-status { font-size: 11px; color: var(--text-muted); min-height: 16px; text-align: center; margin-top: 6px; letter-spacing: 0.5px; }
-
+ 
 /* No download / borrow boxes */
 .dl-borrow-box {
   background: rgba(201,168,76,0.05); border: 1px solid rgba(201,168,76,0.2);
@@ -497,14 +498,14 @@ footer { background: #060E1A; padding: 80px 5% 0; border-top: 1px solid rgba(201
   transition: all 0.3s; text-decoration: none;
 }
 .dl-borrow-btn:hover { background: rgba(201,168,76,0.1); box-shadow: var(--shadow-gold); }
-
+ 
 .dl-nofile-box { text-align: center; padding: 20px; }
 .dl-nofile-box p { font-size: 13px; color: var(--text-muted); font-weight: 300; line-height: 1.7; }
 .dl-nofile-box a { color: var(--gold-light); font-size: 11px; word-break: break-all; }
 </style>
 </head>
 <body>
-
+ 
 <!-- NAVBAR -->
 <nav id="navbar">
   <a href="#" class="nav-logo">LEXI<span>CON</span></a>
@@ -520,7 +521,7 @@ footer { background: #060E1A; padding: 80px 5% 0; border-top: 1px solid rgba(201
     <span></span><span></span><span></span>
   </div>
 </nav>
-
+ 
 <!-- HERO -->
 <section class="hero" id="home">
   <div class="hero-bg"></div>
@@ -554,7 +555,7 @@ footer { background: #060E1A; padding: 80px 5% 0; border-top: 1px solid rgba(201
     <div class="scroll-line"></div>
   </div>
 </section>
-
+ 
 <!-- STATS -->
 <div class="stats" id="stats">
   <div class="stats-grid">
@@ -564,7 +565,7 @@ footer { background: #060E1A; padding: 80px 5% 0; border-top: 1px solid rgba(201
     <div class="stat-item reveal reveal-delay-3"><div class="stat-number" data-target="75000">0</div><div class="stat-label">Daily Visitors</div></div>
   </div>
 </div>
-
+ 
 <!-- MARQUEE -->
 <div class="marquee-section">
   <div class="marquee-track">
@@ -584,7 +585,7 @@ footer { background: #060E1A; padding: 80px 5% 0; border-top: 1px solid rgba(201
     <div class="marquee-item"><span class="dot"></span> Arts & Culture</div>
   </div>
 </div>
-
+ 
 <!-- CATEGORIES -->
 <section class="categories-bg" id="categories">
   <div class="section-label reveal">Browse by Genre</div>
@@ -600,9 +601,9 @@ footer { background: #060E1A; padding: 80px 5% 0; border-top: 1px solid rgba(201
     <div class="cat-card reveal reveal-delay-3" onclick="quickSearch('Education')"><div class="cat-icon">🎓</div><div class="cat-name">Educational</div><div class="cat-count">22,300 books</div></div>
   </div>
 </section>
-
+ 
 <div class="gold-divider"></div>
-
+ 
 <!-- BOOKS GRID -->
 <section class="books-section" id="featured">
   <div class="books-header">
@@ -614,7 +615,7 @@ footer { background: #060E1A; padding: 80px 5% 0; border-top: 1px solid rgba(201
   </div>
   <div class="books-grid" id="booksGridContainer"></div>
 </section>
-
+ 
 <!-- TRENDING -->
 <section class="trending" id="trending">
   <div class="books-header">
@@ -638,7 +639,7 @@ footer { background: #060E1A; padding: 80px 5% 0; border-top: 1px solid rgba(201
     </div>
   </div>
 </section>
-
+ 
 <!-- CTA -->
 <section class="cta-section" id="cta">
   <div class="cta-tag">Stay Updated</div>
@@ -650,7 +651,7 @@ footer { background: #060E1A; padding: 80px 5% 0; border-top: 1px solid rgba(201
   </div>
   <p class="cta-disclaimer">No spam, unsubscribe anytime.</p>
 </section>
-
+ 
 <!-- FOOTER -->
 <footer id="footer">
   <div class="footer-grid">
@@ -700,7 +701,7 @@ footer { background: #060E1A; padding: 80px 5% 0; border-top: 1px solid rgba(201
     </div>
   </div>
 </footer>
-
+ 
 <!-- ══════════════════════════════════
      DOWNLOAD MODAL
 ══════════════════════════════════ -->
@@ -721,7 +722,7 @@ footer { background: #060E1A; padding: 80px 5% 0; border-top: 1px solid rgba(201
     </div>
   </div>
 </div>
-
+ 
 <script>
 /* ════════════════════════════════════
    CONFIG
@@ -733,9 +734,9 @@ const IA_DL      = 'https://archive.org/download/';
 const ALLOWED    = ['pdf','epub','epub3','mobi','txt'];
 const SKIP       = ['_meta','_files','_itemimage','thumb','chocr','djvu','scandata','marc','abbyy','hocr','gif','jp2'];
 const EXT_ORDER  = ['pdf','epub','epub3','mobi','txt'];
-
+ 
 let booksCache = [];
-
+ 
 /* ════════════════════════════════════
    SEARCH
 ════════════════════════════════════ */
@@ -744,17 +745,17 @@ function quickSearch(term) {
   runSearch();
   document.getElementById('featured').scrollIntoView({ behavior: 'smooth' });
 }
-
+ 
 async function runSearch() {
   const q = document.getElementById('searchInput').value.trim();
   if (!q) return;
-
+ 
   const grid = document.getElementById('booksGridContainer');
   grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 0;color:var(--text-muted);font-size:13px;letter-spacing:2px">SEARCHING…</div>';
-
+ 
   document.getElementById('featured-title-text').innerHTML =
     `<span class="italic">Results for</span> "${q}"`;
-
+ 
   const url = `${OL_SEARCH}?q=${encodeURIComponent(q)}&limit=12`
             + `&fields=key,title,author_name,cover_i,ia,public_scan_b,ia_collection_s,subject,first_publish_year`;
   try {
@@ -762,23 +763,23 @@ async function runSearch() {
     const docs = res.data.docs || [];
     booksCache = docs;
     grid.innerHTML = '';
-
+ 
     if (!docs.length) {
       grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 0;color:var(--text-muted)">No results found.</div>';
       return;
     }
-
+ 
     docs.forEach((book, idx) => renderBookCard(book, idx));
     loadTrending(docs);
   } catch {
     grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 0;color:var(--text-muted)">Search error. Please try again.</div>';
   }
 }
-
+ 
 document.getElementById('searchInput').addEventListener('keydown', e => {
   if (e.key === 'Enter') runSearch();
 });
-
+ 
 /* ════════════════════════════════════
    BOOK CARD
 ════════════════════════════════════ */
@@ -787,10 +788,10 @@ function renderBookCard(book, idx) {
   const author = (book.author_name || ['Unknown Author'])[0];
   const subject= (book.subject || ['General'])[0];
   const year   = book.first_publish_year || '';
-
+ 
   const card = document.createElement('div');
   card.className = 'book-card reveal';
-
+ 
   card.innerHTML = `
     <div class="book-cover">
       ${cover
@@ -810,11 +811,11 @@ function renderBookCard(book, idx) {
         <div class="book-pages">${Math.floor(200 + Math.random() * 600)} pp</div>
       </div>
     </div>`;
-
+ 
   document.getElementById('booksGridContainer').appendChild(card);
   setTimeout(() => card.classList.add('visible'), 80 * idx);
 }
-
+ 
 /* ════════════════════════════════════
    TRENDING SIDE LIST
 ════════════════════════════════════ */
@@ -822,13 +823,13 @@ function loadTrending(docs) {
   const list = document.getElementById('trendingList');
   list.innerHTML = '';
   const slice = docs.slice(0, 5);
-
+ 
   slice.forEach((book, i) => {
     const cover  = book.cover_i ? `${COVER_BASE}${book.cover_i}-S.jpg` : '';
     const author = (book.author_name || ['Unknown'])[0];
     const subject= (book.subject || ['General'])[0];
     const idx    = booksCache.indexOf(book);
-
+ 
     const item = document.createElement('div');
     item.className = 'trending-item';
     item.onclick = () => openDlModal(idx);
@@ -845,7 +846,7 @@ function loadTrending(docs) {
       <div class="trending-arrow">›</div>`;
     list.appendChild(item);
   });
-
+ 
   // Featured panel — first book
   const f = docs[0];
   if (f) {
@@ -857,39 +858,39 @@ function loadTrending(docs) {
     document.getElementById('featuredPanelBtn').onclick = () => openDlModal(fidx);
   }
 }
-
+ 
 /* ════════════════════════════════════
    DOWNLOAD MODAL
 ════════════════════════════════════ */
 async function openDlModal(idx) {
   const book = booksCache[idx];
   if (!book) return;
-
+ 
   // Header
   document.getElementById('dlModalTitle').textContent  = book.title;
   document.getElementById('dlModalAuthor').textContent = (book.author_name || ['Unknown Author']).join(', ');
-
+ 
   const coverEl = document.getElementById('dlModalCover');
   coverEl.innerHTML = book.cover_i
     ? `<img src="${COVER_BASE}${book.cover_i}-S.jpg" alt="">`
     : `<div class="dl-modal-cover-placeholder">📚</div>`;
-
+ 
   // Body — spinner
   document.getElementById('dlModalBody').innerHTML =
     `<div class="dl-spinner-wrap"><div class="dl-spinner"></div><p>Fetching download links…</p></div>`;
-
+ 
   document.getElementById('dlOverlay').classList.add('active');
-
+ 
   if (!book.ia || !book.ia.length) {
     renderNoIA();
     return;
   }
-
+ 
   const iaId     = Array.isArray(book.ia) ? book.ia[0] : book.ia;
   const isPublic = book.public_scan_b === true;
   const isLend   = !!(book.ia_collection_s &&
     (book.ia_collection_s.includes('printdisabled') || book.ia_collection_s.includes('inlibrary')));
-
+ 
   // Fast path
   if (isPublic && !isLend) {
     try {
@@ -897,18 +898,18 @@ async function openDlModal(idx) {
       if (files.length) { renderFormats(files, iaId); return; }
     } catch {}
   }
-
+ 
   // Full metadata path
   try {
     const res  = await fetch(`${IA_META}${iaId}`);
     const meta = await res.json();
-
+ 
     const restricted = meta.metadata &&
       (meta.metadata['access-restricted-item'] === 'true' ||
        (meta.metadata.licenseurl || '').includes('personal'));
-
+ 
     const files = parseFiles(meta.files || [], iaId);
-
+ 
     if (!restricted && files.length) {
       renderFormats(files, iaId);
     } else {
@@ -918,13 +919,13 @@ async function openDlModal(idx) {
     isPublic ? renderNoFiles(iaId) : renderBorrow(iaId);
   }
 }
-
+ 
 async function fetchFiles(iaId) {
   const res  = await fetch(`${IA_META}${iaId}/files`);
   const data = await res.json();
   return parseFiles(data.result || [], iaId);
 }
-
+ 
 function parseFiles(rawFiles, iaId) {
   return rawFiles
     .filter(f => {
@@ -945,12 +946,12 @@ function parseFiles(rawFiles, iaId) {
       url : `${IA_DL}${iaId}/${encodeURIComponent(f.name)}`
     }));
 }
-
+ 
 /* ── Render states ── */
 function renderFormats(files, iaId) {
   const uid = Math.random().toString(36).slice(2,8);
   let html = `<div class="dl-section-label">Available Formats</div><div class="dl-format-list">`;
-
+ 
   files.forEach(f => {
     const cls = ['pdf','epub','txt'].includes(f.ext) ? `dl-fmt-${f.ext}` : 'dl-fmt-other';
     const lbl = f.ext === 'epub3' ? 'EPUB3' : f.ext.toUpperCase();
@@ -966,11 +967,11 @@ function renderFormats(files, iaId) {
         <span class="dl-arrow">›</span>
       </div>`;
   });
-
+ 
   html += `</div><div class="dl-status" id="dlStatus-${uid}"></div>`;
   document.getElementById('dlModalBody').innerHTML = html;
 }
-
+ 
 function renderBorrow(iaId) {
   document.getElementById('dlModalBody').innerHTML = `
     <div class="dl-borrow-box">
@@ -980,7 +981,7 @@ function renderBorrow(iaId) {
       <a href="https://archive.org/details/${iaId}" target="_blank" rel="noopener" class="dl-borrow-btn">Borrow Free ↗</a>
     </div>`;
 }
-
+ 
 function renderNoIA() {
   document.getElementById('dlModalBody').innerHTML = `
     <div class="dl-borrow-box">
@@ -989,7 +990,7 @@ function renderNoIA() {
       <p>This book doesn't have a digital edition in the Internet Archive.</p>
     </div>`;
 }
-
+ 
 function renderNoFiles(iaId) {
   document.getElementById('dlModalBody').innerHTML = `
     <div class="dl-nofile-box">
@@ -998,7 +999,7 @@ function renderNoFiles(iaId) {
          style="color:var(--gold-light);font-size:12px">archive.org/details/${iaId}</a>
     </div>`;
 }
-
+ 
 /* ── Download handler ── */
 async function doDownload(url, filename, uid) {
   const s = document.getElementById(`dlStatus-${uid}`);
@@ -1018,12 +1019,12 @@ async function doDownload(url, filename, uid) {
     if (s) setTimeout(() => { s.textContent = '↗ Opened in new tab'; }, 600);
   }
 }
-
+ 
 /* ── Modal controls ── */
 function dlOverlayClick(e) { if (e.target === document.getElementById('dlOverlay')) closeDlModal(); }
 function closeDlModal()    { document.getElementById('dlOverlay').classList.remove('active'); }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDlModal(); });
-
+ 
 /* ════════════════════════════════════
    HELPERS
 ════════════════════════════════════ */
@@ -1034,7 +1035,7 @@ function fmtBytes(b) {
   if (n > 1024)    return (n/1024).toFixed(0)+' KB';
   return n+' B';
 }
-
+ 
 /* ════════════════════════════════════
    COUNTER ANIMATION
 ════════════════════════════════════ */
@@ -1051,7 +1052,7 @@ function animateCounter(el) {
     if (cur >= target) clearInterval(t);
   }, step);
 }
-
+ 
 /* ════════════════════════════════════
    SCROLL REVEAL + INTERSECTION
 ════════════════════════════════════ */
@@ -1064,9 +1065,9 @@ const observer = new IntersectionObserver(entries => {
     }
   });
 }, { threshold: 0.15 });
-
+ 
 document.querySelectorAll('.reveal, .stat-item').forEach(el => observer.observe(el));
-
+ 
 /* ════════════════════════════════════
    NAVBAR SCROLL EFFECT
 ════════════════════════════════════ */
@@ -1074,7 +1075,7 @@ window.addEventListener('scroll', () => {
   document.getElementById('navbar').style.background =
     window.scrollY > 60 ? 'rgba(10,22,40,0.97)' : 'rgba(10,22,40,0.85)';
 });
-
+ 
 /* ════════════════════════════════════
    HAMBURGER
 ════════════════════════════════════ */
@@ -1089,7 +1090,7 @@ function toggleMenu() {
   links.style.border = '1px solid rgba(201,168,76,0.2)';
   links.style.borderRadius = '4px';
 }
-
+ 
 /* ════════════════════════════════════
    INIT — load default books
 ════════════════════════════════════ */
